@@ -24,23 +24,17 @@ import { getLocation } from "../../Services/CoordenadasSrv";
 
 export function AniadirActivos({ route, navigation }) {
   const [Idaux, setId] = useState("A-");
-  const [Tipo, setTipo] = useState("");
-  const [donador, setdonador] = useState("");
-  const [Razon_Social, setRazon_Social] = useState("");
+  const [Nombre, setNombre] = useState("");
   const [Descripcion, setDescripcion] = useState("");
-  const [Ubicacion, setUbicacion] = useState("");
-  const [cantidad, setcantidad] = useState("");
-  const [Custodio, setCustodio] = useState("");
-  const [Confidencialidad, setConfidencialidad] = useState(0);
-  const [Integridad, setIntegridad] = useState(0);
-  const [Disponibilidad, setDisponibilidad] = useState(0);
-  const [VA, setVA] = useState(0);
-  const [selectedItem, setSelectedItem] = useState(null);
-  const [selectedValue, setSelectedValue] = useState("");
+  const [Razon_Social, setRazon_Social] = useState("");
 
+  const [Ubicacion, setUbicacion] = useState("");
   const [iamgeBase64, setImageBase64] = useState("");
 
-  const [Url, setUrl] = useState("");
+  const [Url1, setUrl1] = useState("");
+  const [Url2, setUrl2] = useState("");
+  const [Url3, setUrl3] = useState("");
+  const [Urls,setUrls]=useState([])
   const [Id2, setId2] = useState(0);
   useEffect(() => {
     const consulta = async () => {
@@ -49,24 +43,24 @@ export function AniadirActivos({ route, navigation }) {
     consulta();
   }, []);
 
-  useEffect(() => {
-    console.log("Idfuera", Id2);
+  // useEffect(() => {
+  //   console.log("Idfuera", Id2);
 
-    console.log(
-      parseFloat(Confidencialidad) +
-        parseFloat(Integridad) +
-        parseFloat(Disponibilidad)
-    );
-    setVA(
-      (
-        (parseFloat(Confidencialidad) +
-          parseFloat(Integridad) +
-          parseFloat(Disponibilidad)) /
-        3
-      ).toFixed(2)
-    );
-    console.log("VA", VA);
-  }, [Confidencialidad, Integridad, Disponibilidad]);
+  //   console.log(
+  //     parseFloat(Confidencialidad) +
+  //       parseFloat(Integridad) +
+  //       parseFloat(Disponibilidad)
+  //   );
+  //   setVA(
+  //     (
+  //       (parseFloat(Confidencialidad) +
+  //         parseFloat(Integridad) +
+  //         parseFloat(Disponibilidad)) /
+  //       3
+  //     ).toFixed(2)
+  //   );
+  //   console.log("VA", VA);
+  // }, [Confidencialidad, Integridad, Disponibilidad]);
 
   const pickImages = async () => {
     let resultado = await ImagePicker.launchCameraAsync({
@@ -77,7 +71,8 @@ export function AniadirActivos({ route, navigation }) {
     });
     console.log("Imagen Uri:", resultado.assets[0].uri);
     await setImageBase64(resultado.assets[0].uri);
-    await SubirFoto(resultado.assets[0].uri, Idaux + "", setUrl);
+    await SubirFoto(resultado.assets[0].uri, Idaux + "", setUrl1);
+    Urls.push(Url1)
   };
 
   const AñadirProducto = async() => {
@@ -91,12 +86,12 @@ export function AniadirActivos({ route, navigation }) {
     console.log("latitud:",latitude)
     console.log("lomngitud:",longitude)
 
-    console.log("NUEVO URL", Url);
+    console.log("NUEVO URL", Url1);
     console.log("Objeto", {
       NActivo: Idaux,
-      Tipo: Tipo,
+      Nombre: Nombre,
       coordenadas:locationCoords,
-      donador: donador,
+      Descripcion: Descripcion,
       Razon_Social: Razon_Social,
       Descripcion: Descripcion,
       Razon_Social: Razon_Social,
@@ -110,8 +105,8 @@ export function AniadirActivos({ route, navigation }) {
 
     AddActive({
       NActivo: Idaux,
-      Tipo: Tipo,
-      donador: donador,
+      Nombre: Nombre,
+      Descripcion: Descripcion,
       coordenadas:locationCoords,
       Razon_Social: Razon_Social,
       Descripcion: Descripcion,
@@ -143,35 +138,12 @@ export function AniadirActivos({ route, navigation }) {
           textColor="gray"
         />
         <TextInput
-          label="Tipo"
-          value={Tipo}
-          onChangeText={setTipo}
+          label="Nombre"
+          value={Nombre}
+          onChangeText={setNombre}
           mode="outlined"
           keyboardType="default"
         />
-        <TextInput
-          label="Donador"
-          value={donador}
-          onChangeText={setdonador}
-          mode="outlined"
-          keyboardType="default"
-        />
-
-        <TextInput
-          label="Razon Social"
-          value={Razon_Social}
-          onChangeText={setRazon_Social}
-          mode="outlined"
-          keyboardType="default"
-        />
-        <TextInput
-          label="Cantidad"
-          value={cantidad}
-          onChangeText={setcantidad}
-          mode="outlined"
-          keyboardType="number-pad"
-        />
-
         <TextInput
           label="Descripcion"
           value={Descripcion}
@@ -179,29 +151,8 @@ export function AniadirActivos({ route, navigation }) {
           mode="outlined"
           keyboardType="default"
         />
-        {/* <TextInput
-          label="Ubicacion"
-          value={Ubicacion}
-          onChangeText={setUbicacion}
-          mode="outlined"
-          keyboardType="default"
-        /> */}
 
-        {/* <View
-          style={{
-            flexDirection: "row",
-            alignItems: "stretch",
-          }}
-        >
-          <TextInput
-            style={{ flex: 1, marginRight: 10 }}
-            label="Custodio"
-            value={Custodio}
-            onChangeText={setCustodio}
-            mode="outlined"
-            keyboardType="default"
-          />
-        </View> */}
+       
         <View
           style={{
             alignItems: "center",
@@ -226,62 +177,7 @@ export function AniadirActivos({ route, navigation }) {
           
         </View>
        
-        <StyledText subtitle center>
-          DEFINICION DEL ESTATUS DE LA ENTREGA{" "}
-        </StyledText>
-        <StyledText subtitle> </StyledText>
-        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <Button
-            title="Urgente"
-            onPress={() => {
-              setSelectedValue("Urgente");
-            }}
-            buttonStyle={{
-              borderRadius: 10,
-              backgroundColor: "red",
-              alignSelf: "auto",
-            }}
-            containerStyle={{
-              width: 100,
-              paddingTop: 40,
-              paddingHorizontal: 2,
-            }}
-          />
-
-          <Button
-            title="Medio"
-            onPress={() => {
-              setSelectedValue("Medio");
-            }}
-            buttonStyle={{
-              borderRadius: 10,
-              backgroundColor: "blue",
-              alignSelf: "auto",
-            }}
-            containerStyle={{
-              width: 110,
-              paddingTop: 40,
-              paddingHorizontal: 2,
-            }}
-          />
-
-          <Button
-            title="Bajo"
-            onPress={() => {
-              setSelectedValue("Bajo");
-            }}
-            buttonStyle={{
-              borderRadius: 10,
-              backgroundColor: "green",
-              alignSelf: "auto",
-            }}
-            containerStyle={{
-              width: 110,
-              paddingTop: 40,
-              paddingHorizontal: 2,
-            }}
-          />
-        </View>
+      
         <View style={styles.cajaBotones}>
           <Button
             title="Agregar Activo"

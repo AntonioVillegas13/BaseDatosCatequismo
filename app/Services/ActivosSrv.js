@@ -4,7 +4,7 @@ import { collection, doc, getDocs, setDoc, addDoc, getDoc, query, where } from '
 
 export const AddActive=(producto)=>{
     console.log(global.dbCon);
-    const productRef = doc(global.dbCon, "Donacion", producto.NActivo);
+    const productRef = doc(global.dbCon, "Eventos", producto.NActivo);
     setDoc(productRef, producto);
 
 }
