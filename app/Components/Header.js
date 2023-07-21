@@ -8,7 +8,7 @@ import Icons from "./Icons";
 import { useNavigation } from "@react-navigation/native";
 import StyledText from "./StyledText";
 // import ModernaContext from "../context/ModernaContext/ModernaContext";
-import Logotipo from "../../assets/HermesLogo.jpg";
+import Logotipo from "../../assets/HermesLogo.png";
 
 export default function Header({ back, scale = 1, hide = true, style }) {
   // const [isKeyboardVisible, setKeyboardVisible] = useState(false);

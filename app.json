@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "admin",
-    "slug": "admin",
+    "name": "JesusNet",
+    "slug": "JesusNet",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -9,7 +9,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#92e7a7"
+      "backgroundColor": "#5be7c4"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -32,7 +32,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "23635fa6-65c8-4560-930a-673ec58127e1"
+        "projectId": "890df7d0-721d-4805-bc77-5d57834ad3cd"
       }
     }
   }

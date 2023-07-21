@@ -20,7 +20,7 @@ export const ReseteoForm = ({ navigation }) => {
 
     return <View style={styles.container}>
         <View style={styles.cajaCabecera} >
-        <Image source={require('../../../assets/HermesLogo.jpg')} style={{ width: 400, height: 160 }} />
+        <Image source={require('../../../assets/HermesLogo.png')} style={{ width: 400, height: 160 }} />
 
             {/* <Text>Login Sistema </Text> */}
         </View>

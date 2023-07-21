@@ -24,38 +24,38 @@ export const TarjetaDetalleActivo = (props) => {
   console.log("PEDIDO OBJETO", ObjPedido);
   console.log("PEDIDO OBJETO", ObjPedido);
   const openMap = () => {
-    const url = `https://www.google.com/maps?q=${ObjPedido.coordenadas?.altitude},${ObjPedido.coordenadas?.accuracy}`;
-
-    Linking.openURL(url);
+    const url = `geo:0,0?q=${ObjPedido.coordenadas?.latitude},${ObjPedido.coordenadas?.longitude}`;
+    console.log("url:", url);
+    Linking.openURL(url).catch((error) =>
+      console.log("Error al abrir Google Maps en el navegador:", error)
+    );
   };
+
+  const renderItem = ({ item }) => {
+    return (
+      <View style={styles.item}>
+        <Image
+          style={{ width: 200, height: 200 }}
+          resizeMode="contain"
+          source={{
+            uri: item,
+          }}
+        />
+      </View>
+    );
+  };
+
   return (
     <ScrollView>
       <View style={styles.section}>
-        <ScrollView horizontal={true} contentContainerStyle={styles.content}>
+        <ScrollView contentContainerStyle={styles.content}>
+         
           <View style={{ flexDirection: "column" }}>
             <StyledText subtitle bold margin>
-              NDonativo{" "}
+              Nombre de catequizado{" "}
             </StyledText>
             <StyledText bold margin>
-              {/* {ObjPedido?.NActivo} */}
-              {ObjPedido?.NActivo}
-            </StyledText>
-          </View>
-          <View style={{ flexDirection: "column" }}>
-            <StyledText subtitle bold margin>
-              Donador{" "}
-            </StyledText>
-            <StyledText bold margin>
-              {ObjPedido.donador}
-            </StyledText>
-          </View>
-
-          <View style={{ flexDirection: "column" }}>
-            <StyledText subtitle bold margin>
-              Tipo{" "}
-            </StyledText>
-            <StyledText bold margin>
-              {ObjPedido.Tipo}
+              {ObjPedido.Nombre}
             </StyledText>
           </View>
 
@@ -70,16 +70,16 @@ export const TarjetaDetalleActivo = (props) => {
 
           <View style={{ flexDirection: "column" }}>
             <StyledText subtitle bold margin>
-              Razon Social{" "}
+              Cedula del encargado de subir el certificado{" "}
             </StyledText>
             <StyledText bold margin>
-              {ObjPedido.Razon_Social}
+              {ObjPedido.CedulaResposable}
             </StyledText>
           </View>
 
           <View style={{ flexDirection: "column" }}>
             <StyledText subtitle bold margin>
-              Ubicacion
+              Ubicacion del templo que emitio el certificado
             </StyledText>
             <TouchableOpacity
               onPress={openMap}
@@ -91,17 +91,14 @@ export const TarjetaDetalleActivo = (props) => {
                 size={30}
                 color="#000"
               />
+              
             </TouchableOpacity>
-            <StyledText center>Click Aqui!!</StyledText>
+           
           </View>
         </ScrollView>
 
         <View>
-          <Text></Text>
-          <Text></Text>
-          <Text></Text>
-          <Text></Text>
-          <Text></Text>
+        
         </View>
         {/* 
         <ScrollView horizontal={true} contentContainerStyle={styles.content}>
@@ -142,16 +139,26 @@ export const TarjetaDetalleActivo = (props) => {
       </View>
 
       <View>
-        <View style={{ flexDirection: "column" ,alignItems:"center" }}>
+        <View style={{ alignItems: "center" }}>
           <StyledText subtitle bold margin>
             Imagen{" "}
           </StyledText>
-          <Image
-              style={{ width: 200, height: 200 }}
-              resizeMode="contain"F
-            source={{
-              uri: ObjPedido?.url   }}
+
+          <FlatList
+            data={ObjPedido?.arrayImagenes}
+            renderItem={renderItem}
+            horizontal
+            // pagingEnabled
+            // onEndReachedThreshold={0.1}
+            // keyExtractor={item => item.id}
           />
+
+          {/* <Image
+              style={{ width: 200, height: 200 }}
+              resizeMode="contain"
+            source={{
+              uri: ObjPedido?.arrayImagenes[0]  }}
+          /> */}
         </View>
       </View>
     </ScrollView>
@@ -160,7 +167,8 @@ export const TarjetaDetalleActivo = (props) => {
 
 const styles = StyleSheet.create({
   section: {
-    marginBottom: 20,
+    // marginBottom:: 20,
+    // backgroundColor:"red"
   },
   sectionTitle: {
     fontSize: 20,
@@ -180,7 +188,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  logo:{
-    margin:20
-  }
+  logo: {
+    margin: 20,
+  },
+  item: {
+    // backgroundColor: '#f9c2ff',
+    padding: 20,
+    marginVertical: 8,
+    borderRadius: 8,
+    flexDirection: "row",
+  },
 });

@@ -212,7 +212,7 @@ export const Registrar = ({ navigation }) => {
         <ScrollView>
 
             <View style={styles.cajaCabecera} >
-                <Image source={require('../../../assets/HermesLogo.jpg')} style={{ width: 400, height: 160 }} />
+                <Image source={require('../../../assets/HermesLogo.png')} style={{ width: 400, height: 160 }} />
                 {/* <Text style={{ fontSize: 20 }}>Registrar Usuario</Text> */}
                 <StyledText margin  secondTitle bold>Registrar Usuario</StyledText>
             </View>

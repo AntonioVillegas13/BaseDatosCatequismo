@@ -1,8 +1,9 @@
 import { ref, uploadBytes, uploadString, put, getMetadata, getDownloadURL, uploadBytesResumable } from "firebase/storage";
-
+import uuid from 'react-native-uuid';
 
 
 export const SubirFoto = async (uri, id, fnsetUrl) => {
+  id=id+uuid.v4()
   const ImageRef = ref(global.storage, 'image' + id + '.jpeg');
 
   console.log("______________________________ID:", id)
@@ -45,7 +46,8 @@ export const SubirFoto = async (uri, id, fnsetUrl) => {
     // For instance, get the download URL: https://firebasestorage.googleapis.com/...
    await getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
       console.log('File available at', downloadURL);
-      fnsetUrl(downloadURL);
+      console.warn("subidaCompleta")
+      fnsetUrl.push(downloadURL);
     });
   }
 );

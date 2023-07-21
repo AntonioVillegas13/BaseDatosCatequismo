@@ -1,6 +1,6 @@
 
 
-import { collection, doc, getDocs, setDoc, addDoc, getDoc, query, where } from 'firebase/firestore'
+import { collection, doc, getDocs, setDoc, addDoc, getDoc, query, where, arrayUnion, updateDoc } from 'firebase/firestore'
 
 
 export const guardar = (producto) => {
@@ -119,7 +119,7 @@ export const consultarNoProcesado = async (fnsetPedidos) => {
     
     // console.log("global--------------------------------",Id);
     // const productoRef = collection(global.dbCon, "Pedidos");
-    const productoRef= collection(global.dbCon, "Evento");
+    const productoRef= collection(global.dbCon, "Certificados");
 
     const SnapPedidos = await getDocs(productoRef);
     let PedidoArray = []
@@ -129,16 +129,177 @@ export const consultarNoProcesado = async (fnsetPedidos) => {
             console.log("doce-------------------", documento.data());
             PedidoArray.push(documento.data());
             console.log("ARRAY DENTRO SRT")
-        
-
-
-
     });
 
     fnsetPedidos(PedidoArray)
     console.log("pediFunc2", PedidoArray);
 
 }
+
+
+
+export const consultarContenido= async (fnsetPedidos) => {
+    
+    // console.log("global--------------------------------",Id);
+    // const productoRef = collection(global.dbCon, "Pedidos");
+    const productoRef= collection(global.dbCon, "Tareas");
+
+    const SnapPedidos = await getDocs(productoRef);
+    let PedidoArray = []
+    await SnapPedidos.forEach((documento) => {
+        console.log("doc", documento.data());
+       
+            console.log("doce-------------------", documento.data());
+            PedidoArray.push(documento.data());
+            console.log("ARRAY DENTRO SRT")
+    });
+
+    fnsetPedidos(PedidoArray)
+    console.log("Contenidosrray", PedidoArray);
+
+}
+
+
+
+export const consultarCatequistas= async (fnsetPedidos) => {
+    
+    // console.log("global--------------------------------",Id);
+    // const productoRef = collection(global.dbCon, "Pedidos");
+    const productoRef= collection(global.dbCon, "Catequistas");
+
+    const SnapPedidos = await getDocs(productoRef);
+    let PedidoArray = []
+    await SnapPedidos.forEach((documento) => {
+        console.log("doc", documento.data());
+       
+            console.log("doce-------------------", documento.data());
+            PedidoArray.push(documento.data());
+            console.log("ARRAY DENTRO SRT")
+    });
+
+    fnsetPedidos(PedidoArray)
+    console.log("Contenidosrray", PedidoArray);
+
+}
+
+
+export const addElementToArray = async (userId, newElement) => {
+    try {
+        const washingtonRef = doc(global.dbCon, "Tareas", userId);
+        const docSnap = await getDoc(washingtonRef);
+        console.warn(washingtonRef)
+        // fnsetObj(PedidoObj);
+        // console.log("productoFunc", PedidoObj);
+        const arreglo= await docSnap.data()?.Suscriptores
+        
+        if (!arreglo.includes(newElement)) {
+            console.log('El elemento no está presente en el array.');
+            await updateDoc(washingtonRef, {
+            revisores: arrayUnion(newElement),
+            statusTarea:true
+        });
+          } else {
+            console.log('El elemento está presente en el array.');
+          }
+
+        // await updateDoc(washingtonRef, {
+        //     Suscriptores: arrayUnion(newElement)
+        // });
+
+      console.log('Elemento agregado al array correctamente.');
+    } catch (error) {
+      console.error('Error al agregar el elemento al array:', error);
+    }
+  };
+
+
+
+
+  export const addElementToArrayCatequista = async (userId, newElement,newElement2) => {
+    try {
+        const washingtonRef = doc(global.dbCon, "Catequistas", userId);
+        const docSnap = await getDoc(washingtonRef);
+        console.warn(washingtonRef)
+
+        console.warn("id",userId)
+        console.warn("id",newElement)
+
+        // fnsetObj(PedidoObj);
+        // console.log("productoFunc", PedidoObj);
+        
+        
+            await updateDoc(washingtonRef, {
+            calificaciones: arrayUnion(newElement),
+            comentarios:arrayUnion(newElement2)
+        });
+
+        // await updateDoc(washingtonRef, {
+        //     Suscriptores: arrayUnion(newElement)
+        // });
+
+      console.log('Elemento agregado al array correctamente.');
+    } catch (error) {
+      console.error('Error al agregar el elemento al array:', error);
+    }
+  };
+
+
+  export const UpdateCatequistaPromedio = async (userId, newElement) => {
+    try {
+        const washingtonRef = doc(global.dbCon, "Catequistas", userId);
+        const docSnap = await getDoc(washingtonRef);
+        console.warn(washingtonRef)
+
+        console.warn("id",userId)
+        console.warn("id",newElement)
+
+        // fnsetObj(PedidoObj);
+        // console.log("productoFunc", PedidoObj);
+        
+        
+            await updateDoc(washingtonRef, {
+            promedio:newElement
+        });
+
+        // await updateDoc(washingtonRef, {
+        //     Suscriptores: arrayUnion(newElement)
+        // });
+
+      console.log('Elemento agregado al array correctamente.');
+    } catch (error) {
+      console.error('Error al agregar el elemento al array:', error);
+    }
+  };
+
+
+
+
+
+
+
+
+
+
+
+export const consultar1Contenido=async(fnsetPedidos)=>{
+
+    
+
+    // console.log("global--------------------------------",Id);
+    //console.log("globla",global.dbCon);
+    const productoRef = collection(global.dbCon, "Tareas");
+    const SnapProductos = await getDocs(productoRef);
+    let ProductosArray = []
+    SnapProductos.forEach((documento) => {
+        console.log("doc", documento.data());
+        ProductosArray.push(documento.data());
+
+    });
+    console.log("total dentro A-"+(ProductosArray.length+1))
+    fnsetPedidos("Tarea-"+(ProductosArray.length+1))
+}
+
+
 
 
 export const CambiarPedidoNoProcesado=(PedidoAux)=>{

@@ -4,14 +4,42 @@ import { collection, doc, getDocs, setDoc, addDoc, getDoc, query, where } from '
 
 export const AddActive=(producto)=>{
     console.log(global.dbCon);
-    const productRef = doc(global.dbCon, "Eventos", producto.NActivo);
+    const productRef = doc(global.dbCon, "Certificados", producto.NActivo);
     setDoc(productRef, producto);
 
 }
 
+
+export const AddContenido=(producto)=>{
+    console.log(global.dbCon);
+    const productRef = doc(global.dbCon, "Tareas", producto.NActivo);
+    setDoc(productRef, producto);
+
+}
+
+
+
+
+export const consultarUnContenido = async (id,fnsetObj) => {
+    //console.log("globla",global.dbCon);
+    const productoRef = doc(global.dbCon, "Tareas",id);
+    const docSnap = await getDoc(productoRef);
+    console.log("dsfdsfdfdsfdsfds",docSnap.data());
+
+    let PedidoObj = {}
+    PedidoObj=docSnap.data();
+    fnsetObj(PedidoObj);
+    // console.log("productoFunc", PedidoObj);
+ 
+}
+
+
+
+
+
 export const consultarUnActivo = async (id,fnsetObj) => {
     //console.log("globla",global.dbCon);
-    const productoRef = doc(global.dbCon, "Donacion",id);
+    const productoRef = doc(global.dbCon, "Certificados",id);
     const docSnap = await getDoc(productoRef);
     console.log("dsfdsfdfdsfdsfds",docSnap.data());
 
@@ -25,7 +53,7 @@ export const consultarUnActivo = async (id,fnsetObj) => {
 
 export const consultarActivo = async (setId) => {
     //console.log("globla",global.dbCon);
-    const productoRef = collection(global.dbCon, "Donacion");
+    const productoRef = collection(global.dbCon, "Certificados");
     const SnapProductos = await getDocs(productoRef);
     let ProductosArray = []
     SnapProductos.forEach((documento) => {
@@ -34,9 +62,26 @@ export const consultarActivo = async (setId) => {
 
     });
     console.log("total dentro A-"+(ProductosArray.length+1))
-    setId("A-"+(ProductosArray.length+1))
+    setId("Certificados-"+(ProductosArray.length+1))
 
 }
+
+
+export const consultarContenido = async (setId) => {
+    //console.log("globla",global.dbCon);
+    const productoRef = collection(global.dbCon, "Tareas");
+    const SnapProductos = await getDocs(productoRef);
+    let ProductosArray = []
+    SnapProductos.forEach((documento) => {
+        console.log("doc", documento.data());
+        ProductosArray.push(documento.data());
+
+    });
+    console.log("total dentro A-"+(ProductosArray.length+1))
+    setId("Evento-"+(ProductosArray.length+1))
+
+}
+
 
 export const enviarPedidos = (pedido) => {
     const pedidoRef = doc(global.dbCon, "Pedidos", pedido.codigo);
@@ -88,9 +133,6 @@ export const consultarProcesado = async (fnsetPedidos) => {
        
             console.log("doce-------------------", documento.data());
             PedidoArray.push(documento.data());
-        
-
-
 
     });
 

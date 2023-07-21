@@ -18,8 +18,7 @@ const firebaseConfig = {
     projectId: "basesdedatos-8310c",
     storageBucket: "basesdedatos-8310c.appspot.com",
     messagingSenderId: "231550390905",
-    appId: "1:231550390905:web:2e0112e8f11b24e499baa8",
-    measurementId: "G-Z1RDTHC55C"
+    appId: "1:231550390905:web:2e0112e8f11b24e499baa8"
   
 };
 export const loadConfiguration=()=>{

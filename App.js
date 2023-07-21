@@ -12,6 +12,7 @@ import { Registrar } from "./app/screens/LoginScreen/RegistrarUsuario";
 import { ReseteoForm } from "./app/screens/LoginScreen/ReseteoCorreoScreen";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Icon } from "@rneui/base";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import theme from "./app/theme/theme";
 import { PedidoContext } from "./app/context/PedidosContext";
@@ -22,7 +23,16 @@ import { doc, getDoc } from "firebase/firestore";
 import { AniadirActivos } from "./app/screens/SeguridadInformatica/AgregarActivoScreen";
 import { ListaActivo } from "./app/screens/SeguridadInformatica/ListaActivosScreen";
 import { DetalleActivo } from "./app/screens/SeguridadInformatica/DetalleActivo";
+import { ListaContenido } from "./app/screens/Evento/ListaContenidoScreen";
+import { DetalleContenido } from "./app/screens/Evento/DetalleContenido";
+import { AniadiContenido } from "./app/screens/Evento/AgregarContenidoScreen";
+import { ListaCatequistas } from "./app/screens/Catequistas/ListaCatequistasScreen";
+import { DetalleCatequista } from "./app/screens/Catequistas/DetalleCatequista";
+import { AniadiCatequista } from "./app/screens/Catequistas/AgregarCatequistasScreen";
 const StackManjActivos = createNativeStackNavigator();
+const StackContenido = createNativeStackNavigator();
+const StackCatequistas = createNativeStackNavigator();
+
 const StackMoProd = createNativeStackNavigator();
 const LoginStack = createNativeStackNavigator();
 const StackClient = createNativeStackNavigator();
@@ -42,7 +52,9 @@ const Watson = () => {
             iconName = "list-alt";
           } else if (route.name === "TabPedidosAdmin") {
             iconName = "list-alt";
-          } else if (route.name === "Clientes") {
+          } else if (route.name === "ManejoContenido") {
+            iconName = "users";
+          }else if (route.name === "ManejoCatequistas") {
             iconName = "users";
           }
 
@@ -73,7 +85,23 @@ const Watson = () => {
         component={ManejoActivos}
         options={{
           headerShown: false,
-          title: "Donaciones",
+          title: "Certificados",
+        }}
+      />
+      <TabWatson.Screen
+        name="ManejoContenido"
+        component={ManejoContenido}
+        options={{
+          headerShown: false,
+          title: "Tareas",
+        }}
+      />
+       <TabWatson.Screen
+        name="ManejoCatequistas"
+        component={ManejoCatequistas}
+        options={{
+          headerShown: false,
+          title: "Catequistas",
         }}
       />
     </TabWatson.Navigator>
@@ -106,16 +134,69 @@ const ManejoActivos = () => {
         }}
         component={DetalleActivo}
       />
-
     </StackManjActivos.Navigator>
   );
 };
 
+const ManejoContenido = () => {
+  return (
+    <StackContenido.Navigator>
+      <StackContenido.Screen
+        name="ListaContenido"
+        component={ListaContenido}
+        options={{
+          title: "ListaContenidoScreen",
+          headerShown: false,
+        }}
+      />
 
+      <StackContenido.Screen
+        name="AniadirContenido"
+        options={{
+          headerShown: false,
+        }}
+        component={AniadiContenido}
+      />
+      <StackContenido.Screen
+        name="DetalleContenido"
+        options={{
+          headerShown: false,
+        }}
+        component={DetalleContenido}
+      />
+    </StackContenido.Navigator>
+  );
+};
 
+const ManejoCatequistas = () => {
+  return (
+    <StackCatequistas.Navigator>
+      <StackCatequistas.Screen
+        name="ListaCatequistas"
+        component={ListaCatequistas}
+        options={{
+          title: "ListaContenidoScreen",
+          headerShown: false,
+        }}
+      />
 
-
-
+      <StackCatequistas.Screen
+        name="AniadiCatequista"
+        options={{
+          headerShown: false,
+        }}
+        component={AniadiCatequista}
+      />
+      <StackCatequistas.Screen
+        name="DetalleContenido"
+        options={{
+          headerShown: false,
+        }}
+        component={DetalleCatequista}
+      />
+    </StackCatequistas.Navigator>
+  );
+};
 
 const LoginNav = () => {
   return (
@@ -147,11 +228,12 @@ const LoginNav = () => {
 };
 
 const verficarFire = async (fnSetLogin, id) => {
-  const docRef = doc(global.dbCon, "Administradores", id);
+  const docRef = doc(global.dbCon, "usuarios", id);
   const docSnap = await getDoc(docRef);
   if (docSnap.exists()) {
     fnSetLogin(true);
-    console.log("Document data:", docSnap.data());
+    console.log("Document data:", docSnap.data().cedula);
+   await AsyncStorage.setItem('@miApp:InfoUser', docSnap.data().cedula);
   } else {
     // doc.data() will be undefined in this case
     console.log("No such document!");

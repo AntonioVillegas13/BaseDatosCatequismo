@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import {  Picker } from "react-native-web";
+import { Picker } from "react-native-web";
 import {
   View,
   StyleSheet,
   FlatList,
-  TouchableHighlight,
+  TouchableOpacity,
   ScrollView,
-  Alert
+  Alert,
 } from "react-native";
 import { Card, Text, TextInput, DropDown } from "react-native-paper";
 import theme from "../../theme/theme";
@@ -16,31 +16,33 @@ import uuid from "react-native-uuid";
 import * as ImagePicker from "expo-image-picker";
 import { SubirFoto, SubirIamgen } from "../../Services/ImagesSrv";
 import Header from "../../Components/Header";
-import { TouchableOpacity } from "react-native-web";
+// import { TouchableOpacity } from "react-native-web";
 import StyledText from "../../Components/StyledText";
 // import QRCode from "react-native-qrcode-svg";
 import { AutocompleteDropdown } from "react-native-autocomplete-dropdown";
 import { getLocation } from "../../Services/CoordenadasSrv";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export function AniadirActivos({ route, navigation }) {
-  const [Idaux, setId] = useState("A-");
+  const [Idaux, setId] = useState("Evento-");
   const [Nombre, setNombre] = useState("");
   const [Descripcion, setDescripcion] = useState("");
-  const [Razon_Social, setRazon_Social] = useState("");
-
-  const [Ubicacion, setUbicacion] = useState("");
-  const [iamgeBase64, setImageBase64] = useState("");
+  const [CedulaResposable, setCedulaResposable] = useState("");
 
   const [Url1, setUrl1] = useState("");
-  const [Url2, setUrl2] = useState("");
-  const [Url3, setUrl3] = useState("");
-  const [Urls,setUrls]=useState([])
+
+  const [Urls, setUrls] = useState([]);
   const [Id2, setId2] = useState(0);
   useEffect(() => {
     const consulta = async () => {
       await consultarActivo(setId);
+      const data = await AsyncStorage.getItem('@miApp:InfoUser');
+      console.log("usuarioInfo:",data)
+      setCedulaResposable(data)
     };
     consulta();
+
+    
   }, []);
 
   // useEffect(() => {
@@ -63,60 +65,61 @@ export function AniadirActivos({ route, navigation }) {
   // }, [Confidencialidad, Integridad, Disponibilidad]);
 
   const pickImages = async () => {
-    let resultado = await ImagePicker.launchCameraAsync({
+    let resultado = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       aspect: [4, 3],
       quality: 1,
       // base64:true
     });
     console.log("Imagen Uri:", resultado.assets[0].uri);
-    await setImageBase64(resultado.assets[0].uri);
-    await SubirFoto(resultado.assets[0].uri, Idaux + "", setUrl1);
-    Urls.push(Url1)
+    // await setImageBase64(resultado.assets[0].uri);
+    await SubirFoto(resultado.assets[0].uri, Idaux + "", Urls);
+    //  await
+    // console.warn("array", Urls);
   };
 
-  const AñadirProducto = async() => {
+
+  // const pickImages = async () => {
+  //   let resultado = await ImagePicker.launchCameraAsync({
+  //     mediaTypes: ImagePicker.MediaTypeOptions.Images,
+  //     aspect: [4, 3],
+  //     quality: 1,
+  //     // base64:true
+  //   });
+  //   console.log("Imagen Uri:", resultado.assets[0].uri);
+  //   // await setImageBase64(resultado.assets[0].uri);
+  //   await SubirFoto(resultado.assets[0].uri, Idaux + "", Urls);
+  //   //  await
+  //   // console.warn("array", Urls);
+  // };
+
+  const AñadirProducto = async () => {
     // SubirIamgen();
     const locationCoords = await getLocation();
     const { latitude, longitude } = locationCoords;
     // Alert.alert(
     //   "Coordenas Capturadas",latitude,"+",longitude
-      
+
     // );
-    console.log("latitud:",latitude)
-    console.log("lomngitud:",longitude)
+    console.log("latitud:", latitude);
+    console.log("lomngitud:", longitude);
 
     console.log("NUEVO URL", Url1);
     console.log("Objeto", {
       NActivo: Idaux,
       Nombre: Nombre,
-      coordenadas:locationCoords,
+      coordenadas: locationCoords,
       Descripcion: Descripcion,
-      Razon_Social: Razon_Social,
-      Descripcion: Descripcion,
-      Razon_Social: Razon_Social,
-      Descripcion: Descripcion,
-      Ubicacion: Ubicacion,
-      cantidad: cantidad,
-    
-      url: Url,
-      para: selectedItem,
+      arrayImagenes: Urls,
     });
 
     AddActive({
       NActivo: Idaux,
       Nombre: Nombre,
+      coordenadas: locationCoords,
       Descripcion: Descripcion,
-      coordenadas:locationCoords,
-      Razon_Social: Razon_Social,
-      Descripcion: Descripcion,
-      Razon_Social: Razon_Social,
-      Descripcion: Descripcion,
-      // Ubicacion: Ubicacion,
-      cantidad: cantidad,
-      url: Url,
-      selectedValue: selectedValue,
-      
+      arrayImagenes: Urls,
+      CedulaResposable:CedulaResposable
     });
   };
 
@@ -126,11 +129,11 @@ export function AniadirActivos({ route, navigation }) {
         <Header />
         <StyledText subtitle center>
           {" "}
-          INFORMACION GENERAL
+        Sube el certificado 
         </StyledText>
         <StyledText subtitle> </StyledText>
         <TextInput
-          label="N° de Donacion"
+          label="N° de certificado"
           value={Idaux + ""}
           editable={false}
           mode="outlined"
@@ -138,7 +141,7 @@ export function AniadirActivos({ route, navigation }) {
           textColor="gray"
         />
         <TextInput
-          label="Nombre"
+          label="Nombre del catequizado"
           value={Nombre}
           onChangeText={setNombre}
           mode="outlined"
@@ -152,38 +155,48 @@ export function AniadirActivos({ route, navigation }) {
           keyboardType="default"
         />
 
-       
         <View
           style={{
             alignItems: "center",
             // justifyContent: "center",
           }}
         >
-          <Button
-            title="Agregar Imagen referencial de la Donacion"
+          <TouchableOpacity
             onPress={() => {
               pickImages();
             }}
-            buttonStyle={{
-              borderRadius: 10,
-              backgroundColor: theme.colors.jade,
-              alignSelf: "auto",
-            }}
-            containerStyle={{
-              width: 100,
-              paddingTop: 10,
-            }}
-          />
-          
+            style={
+              {
+                flexDirection:"row",
+                alignContent:"space-between",
+                margin:20,
+
+
+              }
+            }
+          >
+            <StyledText >Sube los archivos respectivos</StyledText>
+            <View
+              style={{
+                backgroundColor: theme.colors.jade,
+                borderRadius: 10,
+                // margin: 30,
+                marginHorizontal:10,
+                alignItems: "center",
+              }}
+            >
+              <Icon name="add-circle" size={30} color="white" />
+            </View>
+          </TouchableOpacity>
         </View>
-       
-      
+
         <View style={styles.cajaBotones}>
           <Button
-            title="Agregar Activo"
-            onPress={async() => {
+            title="Registrar"
+            onPress={async () => {
               AñadirProducto();
-              navigation.navigate("ListaActivos")
+              navigation.navigate("ListaActivos");
+              // console.warn("array", Urls);
             }}
             buttonStyle={{
               borderRadius: 10,

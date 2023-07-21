@@ -35,7 +35,7 @@ export const DetalleActivo = ({ route, navigation }) => {
         <View>
             <ScrollView>
                 <Header back={() => navigation?.goBack()} />
-                <StyledText title bold center>Resumen de Activo</StyledText >
+                <StyledText title bold center>Informacion del Certificado</StyledText >
                 <View style={{ alignItems: "center" }}>
                 </View>
 

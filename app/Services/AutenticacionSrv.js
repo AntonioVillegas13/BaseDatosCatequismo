@@ -1,4 +1,5 @@
 import { getAuth, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword, sendPasswordResetEmail, deleteUser, onAuthStateChanged } from "firebase/auth";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 // export const VerificarRol=(){
@@ -38,6 +39,7 @@ export const Ingresar = async (email, password, setErrorEStado, setErrorMessage)
       // Signed in 
       const user = userCredential.user;
       console.log("correcto ingreso", user)
+      AsyncStorage.setItem('@miApp:usuario', user.email);
       //global.userIdLogin = user.uid
       // fnsetId(user.uid)
       // ...

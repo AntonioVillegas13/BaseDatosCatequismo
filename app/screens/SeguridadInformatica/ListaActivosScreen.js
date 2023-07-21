@@ -41,7 +41,6 @@ export const ListaActivo = ({ navigation }) => {
     console.log("recupernado datos ", uid2);
     await consultarNoProcesado(setPedidos);
     console.log("OED", pedidos);
-
   };
 
   const recuperarUsuario = async () => {
@@ -61,48 +60,46 @@ export const ListaActivo = ({ navigation }) => {
       <Header />
 
       <View style={styles.cajaCabecera}>
-        <Text style={{ fontSize: theme.fontSize.title,textAlign:"center" }}>Lista DE Eventos</Text>
+        <Text style={{ fontSize: 30, textAlign: "center" }}>
+          Lista de Certificados
+        </Text>
       </View>
-      <View style={styles.cajaCuerpo}>
+      <ScrollView style={styles.cajaCuerpo}>
         <TarjetaActivos pedidos={pedidos} navegar={navigation} />
-        
-      </View>
-
+      </ScrollView>
 
       <FAB
-            
-                style={styles.fab}
-                color="gray"
-                icon={{ name: 'add', color: 'white' }}
-                onPress={() => {
-                    navigation.navigate("AniadirActivo")
-                }}
-            />
+        style={styles.fab}
+        color="gray"
+        icon={{ name: "add", color: "white" }}
+        onPress={() => {
+          navigation.navigate("AniadirActivo");
+        }}
+      />
 
-<Icon
+      <Icon
         raised
-        name='close'
-        type='font-awesome'
-        color=''
-        onPress={() => cerrarSesion()} />
+        name="close"
+        type="font-awesome"
+        color=""
+        onPress={() => cerrarSesion()}
+      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-    fab: {
-        position: 'absolute',
-        margin: 16,
-        right: 0,
-        bottom: 0,
-      
-    }, 
-    fab2: {
-      position: 'absolute',
-      margin: 16,
-      left: 0,
-      bottom: 0,
-    
+  fab: {
+    position: "absolute",
+    margin: 16,
+    right: 0,
+    bottom: 0,
+  },
+  fab2: {
+    position: "absolute",
+    margin: 16,
+    left: 0,
+    bottom: 0,
   },
   container: {
     flex: 1,
@@ -175,18 +172,17 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   cajaCabecera: {
-    //backgroundColor: 'cyan',
-    flex: 2,
+    // backgroundColor: 'cyan',
+    // flex: 0.8,
     alignItems: "center",
     justifyContent: "flex-start",
-    marginBottom: 50,
+    // marginBottom: 50,
     paddingTop: 10,
   },
   cajaCuerpo: {
     // backgroundColor: 'brown',
-    flex: 5,
-    alignItems: "stretch",
-    justifyContent: "flex-start",
+    flex: 10,
+  
   },
   titulo: {
     fontSize: 16,
